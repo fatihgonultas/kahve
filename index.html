@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kahve Teklifi</title>
+    <title>Kaçan Hayır Butonu</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #db34a9; /* Mavi arka plan */
+            background-color: #3498db; /* Mavi arka plan */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,7 +18,7 @@
         }
 
         .container {
-            background: rgb(143, 126, 126);
+            background: rgb(129, 1, 1);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -55,10 +55,10 @@
 </head>
 <body>
     <div class="container">
-        <p>Merhaba Deniz, benimle kahve içmek ister misin?</p>
+        <p>XXX benimle şunu yapmak ister misin?</p>
         <div class="buttons">
             <button id="evet" onclick="evetClicked()">Evet</button>
-            <button id="hayir" onmouseover="kac()">Hayır</button>
+            <button id="hayir" onmouseover="kac()" ontouchstart="kac()">Hayır</button>
         </div>
     </div>
 
@@ -86,3 +86,4 @@
     </script>
 </body>
 </html>
+
