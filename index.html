@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevaplanması gereken soru</title>
+    <title>Bir Sorum Var! ❤️</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffebee; /* Çok açık kırmızı/pembe ton */
+            background-color: #ffebee;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -16,15 +16,13 @@
             margin: 0;
             overflow: hidden; 
             text-align: center;
-            transition: background-color 0.5s;
         }
 
         h1 {
             color: #c62828;
             font-size: 2rem;
             margin-bottom: 20px;
-            z-index: 2; /* Yazı butonların üstünde kalsın */
-            position: relative;
+            z-index: 2;
         }
 
         img {
@@ -33,7 +31,6 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 2;
-            position: relative;
         }
 
         .buttons {
@@ -42,7 +39,8 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            z-index: 5; /* Butonlar en üstte */
+            width: 100%;
+            height: 100px; /* Butonların ilk hizalanması için */
         }
 
         button {
@@ -51,26 +49,34 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s ease; /* Hızlı büyüme efekti */
             font-weight: bold;
             outline: none;
+            transition: transform 0.2s ease, background-color 0.2s;
         }
 
         #yesBtn {
-            background-color: #2e7d32; /* Koyu Yeşil */
+            background-color: #2e7d32;
             color: white;
             box-shadow: 0 4px 10px rgba(46, 125, 50, 0.4);
-            z-index: 10; /* Evet butonu her zaman hayırın üstüne çıksın */
+            z-index: 10; /* Evet her zaman en üstte */
+            position: relative;
         }
 
         #noBtn {
-            background-color: #d32f2f; /* Kırmızı */
+            background-color: #d32f2f;
             color: white;
             box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
-            z-index: 1; 
+            z-index: 5; 
+            /* Hayır butonu hareket edeceği için position: absolute olacak */
+            position: absolute; 
+            right: 40%; /* Başlangıç konumu */
         }
 
-        /* Başarılı sonuç ekranı (başlangıçta gizli) */
+        /* EVET butonu başlangıç konumu */
+        #yesBtn {
+            left: -30px; /* Ortalamak için hafif ayar */
+        }
+
         #success-message {
             display: none;
             position: fixed;
@@ -82,22 +88,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 9999; /* Her şeyin üstünde */
+            z-index: 9999;
         }
 
-        #success-message h1 {
-            font-size: 2.5rem;
-            color: #d81b60;
-        }
-
+        #success-message h1 { font-size: 2.5rem; color: #d81b60; }
     </style>
 </head>
 <body>
 
     <div id="main-content">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDdtZ2FlZDM0aGd5emF6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6L2NhdC1iZWcvZ2lwaHkuZ2lm/MDJ9IbCxx54WGxpU KO/giphy.gif" alt="Please Cat">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55L2NhdC1wbGVhc2UvZ2lwaHkuZ2lm/uTP8hZ2B6Q2kw/giphy.gif" alt="Cute Cat">
         
-        <h1 id="question">16.15 de molaya çıkalım</h1>
+        <h1 id="question">Bu akşam dışarı çıkalım mı? ☕</h1>
 
         <div class="buttons">
             <button id="yesBtn" onclick="acceptOffer()">EVET</button>
@@ -107,54 +109,62 @@
 
     <div id="success-message">
         <img src="https://media.giphy.com/media/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Cat" style="width: 300px; border-radius: 20px;">
-        <h1>gel beni al madem 16.10 da</h1>
+        <h1>Biliyordum! Hazırlan çıkıyoruz! 🚗</h1>
     </div>
 
     <script>
-        let scaleFactor = 1; // Başlangıç boyutu
+        let scaleFactor = 1;
         const yesBtn = document.getElementById("yesBtn");
         const noBtn = document.getElementById("noBtn");
 
-        function rejectOffer() {
-            // Her tıklamada büyüme katsayısını artır
-            scaleFactor += 0.4; // Büyüme hızı (daha hızlı istersen burayı 1 yap)
+        // Sayfa açıldığında Hayır butonunu yerine koyalım (CSS'te kayma olmasın diye)
+        // Bu fonksiyon rastgele bir sayı üretir
+        function getRandomPosition(max) {
+            return Math.floor(Math.random() * max);
+        }
 
-            // EVET butonunu büyüt
+        function rejectOffer() {
+            // 1. EVET Butonunu Büyüt
+            scaleFactor += 0.5;
             yesBtn.style.transform = `scale(${scaleFactor})`;
 
-            // Metni biraz daha agresif yapabiliriz (Opsiyonel)
-            // yesBtn.innerText = "EVET !!!"; 
+            // 2. HAYIR Butonunu Rastgele Bir Yere Işınla
+            // Ekran genişliği ve yüksekliğini al
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20; // Taşmaması için -20
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
 
-            // Eğer buton çok büyüdüyse (örneğin 6 katına çıktıysa)
-            // Artık ekranı tamamen kaplasın ki kaçış olmasın
-            if (scaleFactor >= 5) {
+            const randomX = getRandomPosition(maxX);
+            const randomY = getRandomPosition(maxY);
+
+            // Butonu yeni konuma gönder
+            noBtn.style.position = "fixed"; // Artık ekranın herhangi bir yerinde olabilir
+            noBtn.style.left = randomX + "px";
+            noBtn.style.top = randomY + "px";
+
+            // 3. Final: Evet butonu çok büyüdüyse ekranı kapla
+            if (scaleFactor >= 6) {
                 yesBtn.style.position = "fixed";
                 yesBtn.style.top = "0";
                 yesBtn.style.left = "0";
                 yesBtn.style.width = "100vw";
                 yesBtn.style.height = "100vh";
-                yesBtn.style.transform = "none"; // Scale'i sıfırla, direkt width/height kullan
+                yesBtn.style.transform = "none"; 
                 yesBtn.style.borderRadius = "0";
                 yesBtn.style.display = "flex";
                 yesBtn.style.alignItems = "center";
                 yesBtn.style.justifyContent = "center";
-                yesBtn.style.fontSize = "5rem"; // Yazıyı devasa yap
-                yesBtn.innerText = "kolaydı beyza..";
+                yesBtn.style.fontSize = "5rem";
+                yesBtn.innerText = "MECBURSUN ARTIK! 😂";
                 
-                // Hayır butonunu gizleyelim ki kafa karışmasın
-                noBtn.style.display = "none";
+                noBtn.style.display = "none"; // Hayır butonunu yok et
             }
         }
 
         function acceptOffer() {
-            // Sadece EVET'e basıldığında çalışır
             document.getElementById("success-message").style.display = "flex";
-            // Arka plandaki soru ekranını gizle
             document.getElementById("main-content").style.display = "none";
         }
     </script>
 
 </body>
 </html>
-
-
