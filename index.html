@@ -3,169 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>14.30 Mola Teklifi</title>
-    <!-- Google Fonts ekleyelim, daha şık dursun -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Bir Sorum Var! ❤️</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fce4ec; /* Tatlı bir pembe arka plan */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden; /* Buton ekran dışına taşmasın */
+            overflow: hidden; /* Taşmaları engelle */
+            text-align: center;
         }
 
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
             position: relative;
-            z-index: 10;
+            z-index: 1;
         }
 
         h1 {
-            color: #333;
-            font-family: 'Pacifico', cursive;
-            margin-bottom: 30px;
-            font-size: 28px;
+            color: #d81b60;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 200px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .buttons {
             display: flex;
-            justify-content: center;
             gap: 20px;
-            position: relative;
-            min-height: 60px; /* Buton kaçınca alan çökmesin */
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 18px;
-            cursor: pointer;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             border: none;
             border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            outline: none;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        #evet {
-            background-color: #4CAF50;
-            color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
-        
-        #evet:hover {
-            background-color: #45a049;
-        }
-
-        #hayir {
-            background-color: #ff4757;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-            /* Pozisyonu script ile değiştireceğiz */
-            transition: all 0.3s ease; /* Kaçarken daha akıcı görünsün */
-            z-index: 1000; /* Her şeyin üstünde olsun */
-        }
-
-        /* Mesaj kutusu gizli başlar */
-        #sonuc-mesaji {
-            display: none;
-            margin-top: 20px;
-            font-size: 18px;
-            color: #2ed573;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: bold;
-            animation: fadeIn 0.5s;
         }
 
-        /* Gizli GIF için alan */
-        .gif-container {
+        #yesBtn {
+            background-color: #4caf50; /* Yeşil */
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+
+        #noBtn {
+            background-color: #ef5350; /* Kırmızı */
+            color: white;
+            box-shadow: 0 4px 10px rgba(239, 83, 80, 0.4);
+        }
+
+        /* Başarılı sonuç ekranı için gizli div */
+        #success-message {
             display: none;
-            margin-top: 15px;
-        }
-        
-        .gif-container img {
-            width: 100%;
-            border-radius: 10px;
+            color: #d81b60;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Tüm ekranı kaplayan buton stili */
+        .full-screen-yes {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999;
+            font-size: 5rem !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 !important;
+        }
+
+        /* Mobilde yazıların çok küçük kalmaması için */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            img { width: 150px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="soru-metni">Beyza, 14.30 mola, hayır demek yasak...☕</h1>
+    <div class="container" id="main-content">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55L2NhdC1wbGVhc2UvZ2lwaHkuZ2lm/uTP8hZ2B6Q2kw/giphy.gif" alt="Cute Cat" id="main-image">
         
-        <div class="buttons">
-            <button id="evet" onclick="kabulEdildi()">Evet</button>
-            <!-- Mobilde dokunmayı (touchstart) ve masaüstünde mouse (mouseover) olaylarını yakalıyoruz -->
-            <button id="hayir" onmouseover="kac()" ontouchstart="kac()">Hayır</button>
-        </div>
+        <h1 id="question">Bu akşam dışarı çıkalım mı? ☕</h1>
 
-        <div id="sonuc-mesaji">
-         14.30 da görüşürüz.
-        </div>
-        
-        <div class="gif-container" id="mutlu-gif">
-            <!-- Örnek bir kutlama görseli -->
-            <img src="https://media.giphy.com/media/TdfyKrN7HGTIY/giphy.gif" alt="Mutlu Dans">
+        <div class="buttons">
+            <button id="yesBtn" onclick="acceptOffer()">EVET</button>
+            <button id="noBtn" onclick="rejectOffer()">Hayır</button>
         </div>
     </div>
 
+    <div id="success-message">
+        <img src="https://media.giphy.com/media/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Cat" style="width: 300px;">
+        <h1>Yey! Hazırlan, seni alıyorum! 🚗💨</h1>
+    </div>
+
     <script>
-        function kabulEdildi() {
-            // Butonları gizle
-            document.querySelector('.buttons').style.display = 'none';
-            // Soruyu değiştir
-            document.getElementById('soru-metni').innerText = "BENDENSİN";
-            // Mesajı göster
-            document.getElementById('sonuc-mesaji').style.display = 'block';
-            // Gif'i göster
-            document.getElementById('mutlu-gif').style.display = 'block';
+        let yesButtonSize = 1.2; // Başlangıç font büyüklüğü (rem)
+        let clickCount = 0; // Kaç kere hayır dendiğini sayar
+
+        function rejectOffer() {
+            clickCount++;
+            const yesBtn = document.getElementById("yesBtn");
+            const noBtn = document.getElementById("noBtn");
+            const questionText = document.getElementById("question");
+
+            // 1. EVET butonunu büyüt
+            yesButtonSize += 0.5; // Her basışta fontu büyüt
+            yesBtn.style.fontSize = yesButtonSize + "rem";
+            
+            // Butonun padding'ini de büyüt ki orantılı görünsün
+            let currentPadding = 15 + (clickCount * 10);
+            yesBtn.style.padding = `${currentPadding}px ${currentPadding * 2}px`;
+
+            // 2. Hayır butonuna tıklandıkça metni değiştir (Opsiyonel eğlence)
+            const phrases = [
+                "Hayır mı?", 
+                "Emin misin?", 
+                "Gerçekten mi?", 
+                "Bir daha düşün!", 
+                "Kalbimi kırıyorsun...", 
+                "Şaka yapıyorsun?",
+                "O TUŞA BASAMAZSIN!"
+            ];
+
+            // Metinleri sırayla göster, bitince sonuncuda kal
+            if (clickCount < phrases.length) {
+                noBtn.innerText = phrases[clickCount];
+            } else {
+                noBtn.innerText = "YOK ARTIK!";
+            }
+
+            // 3. Eğer çok büyüdüyse ekranı kapla
+            // Mobilde daha çabuk kaplasın diye 6. tıkta, bilgisayarda 8. tıkta tetiklenebilir
+            if (clickCount >= 7) {
+                yesBtn.classList.add("full-screen-yes");
+                yesBtn.innerText = "MECBURSUN ARTIK EVET! 😂";
+                questionText.style.display = "none";
+                noBtn.style.display = "none"; // Hayır butonunu yok et
+            }
         }
 
-        function kac() {
-            var hayirButton = document.getElementById("hayir");
-
-            // Butonun boyutlarını al
-            var buttonWidth = hayirButton.offsetWidth;
-            var buttonHeight = hayirButton.offsetHeight;
-
-            // Pencerenin boyutlarını al (Biraz pay bırakalım ki kenara yapışmasın)
-            var windowWidth = window.innerWidth - 60;
-            var windowHeight = window.innerHeight - 60;
-
-            // Rastgele yeni X ve Y koordinatları belirle
-            var newX = Math.random() * (windowWidth - buttonWidth); 
-            var newY = Math.random() * (windowHeight - buttonHeight);
-            
-            // Negatif değer çıkarsa 0'a eşitle (Ekran dışına çıkmasın)
-            newX = newX < 20 ? 20 : newX;
-            newY = newY < 20 ? 20 : newY;
-
-            // Butona "fixed" (sabit) pozisyon veriyoruz ki kutudan bağımsız kaçabilsin
-            hayirButton.style.position = "fixed";
-            hayirButton.style.left = newX + "px";
-            hayirButton.style.top = newY + "px";
+        function acceptOffer() {
+            document.getElementById("main-content").style.display = "none";
+            document.getElementById("success-message").style.display = "flex";
+            document.getElementById("success-message").style.flexDirection = "column";
+            document.getElementById("success-message").style.alignItems = "center";
+            document.body.style.backgroundColor = "#ffcdd2"; // Arka plan rengini değiştir
         }
     </script>
+
 </body>
 </html>
-
-
-
