@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevaplanması Gereken Sorular</title>
+    <title>Bir Sorum Var! ❤️</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,149 +14,133 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden; 
+            overflow: hidden; /* Taşan kısımlar (Hayır butonu) görünmesin */
             text-align: center;
         }
 
         h1 {
             color: #c62828;
             font-size: 2rem;
-            margin-bottom: 20px;
-            z-index: 2;
+            margin-bottom: 30px;
         }
 
         img {
-            width: 220px;
+            width: 200px;
             border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 2;
         }
 
+        /* Olayın koptuğu yer burası */
         .buttons {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            flex-direction: row; /* Yan yana durlar */
+            align-items: center; /* Dikeyde ortala */
+            justify-content: center; /* Yatayda ortala */
+            gap: 20px; /* Aralarında 20px boşluk olsun */
+            
+            /* ÖNEMLİ: Bu ayar sayesinde Evet büyüyünce Hayır aşağı kaymaz, sağa itilir */
+            flex-wrap: nowrap; 
             width: 100%;
-            height: 100px; /* Butonların ilk hizalanması için */
         }
 
         button {
-            padding: 12px 25px;
-            font-size: 1.2rem;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            outline: none;
-            transition: transform 0.2s ease, background-color 0.2s;
+            transition: all 0.3s ease; /* Büyüme animasyonu yumuşak olsun */
+            white-space: nowrap; /* Yazılar alt satıra inmesin */
         }
 
         #yesBtn {
             background-color: #2e7d32;
             color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem; /* Başlangıç boyutu */
             box-shadow: 0 4px 10px rgba(46, 125, 50, 0.4);
-            z-index: 10; /* Evet her zaman en üstte */
-            position: relative;
         }
 
         #noBtn {
             background-color: #d32f2f;
             color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
-            z-index: 5; 
-            /* Hayır butonu hareket edeceği için position: absolute olacak */
-            position: absolute; 
-            right: 40%; /* Başlangıç konumu */
         }
 
-        /* EVET butonu başlangıç konumu */
-        #yesBtn {
-            left: -30px; /* Ortalamak için hafif ayar */
-        }
-
+        /* Başarı Ekranı */
         #success-message {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffcdd2;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ffcdd2;
+            z-index: 999;
         }
-
-        #success-message h1 { font-size: 2.5rem; color: #d81b60; }
     </style>
 </head>
 <body>
 
     <div id="main-content">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55b3R6eW55L2NhdC1wbGVhc2UvZ2lwaHkuZ2lm/uTP8hZ2B6Q2kw/giphy.gif" alt="Cute Cat">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDdtZ2FlZDM0aGd5emF6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6L2NhdC1iZWcvZ2lwaHkuZ2lm/MDJ9IbCxx54WGxpU KO/giphy.gif" alt="Please Cat">
         
-        <h1 id="question">Beyza 16.15 de mola</h1>
+        <h1 id="question">Bu akşam bir kahve? ☕</h1>
 
         <div class="buttons">
-            <button id="yesBtn" onclick="acceptOffer()">Evet</button>
+            <button id="yesBtn" onclick="acceptOffer()">EVET</button>
             <button id="noBtn" onclick="rejectOffer()">Hayır</button>
         </div>
     </div>
 
     <div id="success-message">
         <img src="https://media.giphy.com/media/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Cat" style="width: 300px; border-radius: 20px;">
-        <h1>Gelir beni IT odasından alırsın, birazdan izmitten dönücem.</h1>
+        <h1>Yey! Akşam görüşürüz! 🎉</h1>
     </div>
 
     <script>
-        let scaleFactor = 1;
-        const yesBtn = document.getElementById("yesBtn");
-        const noBtn = document.getElementById("noBtn");
-
-        // Sayfa açıldığında Hayır butonunu yerine koyalım (CSS'te kayma olmasın diye)
-        // Bu fonksiyon rastgele bir sayı üretir
-        function getRandomPosition(max) {
-            return Math.floor(Math.random() * max);
-        }
+        let currentFontSize = 1.2; // Başlangıç font boyutu (rem cinsinden)
+        let currentPadding = 15;   // Başlangıç padding (px cinsinden)
+        let clickCount = 0;
 
         function rejectOffer() {
-            // 1. EVET Butonunu Büyüt
-            scaleFactor += 0.5;
-            yesBtn.style.transform = `scale(${scaleFactor})`;
+            clickCount++;
+            const yesBtn = document.getElementById("yesBtn");
+            const noBtn = document.getElementById("noBtn");
 
-            // 2. HAYIR Butonunu Rastgele Bir Yere Işınla
-            // Ekran genişliği ve yüksekliğini al
-            const maxX = window.innerWidth - noBtn.offsetWidth - 20; // Taşmaması için -20
-            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            // 1. Her tıklamada EVET butonunun özelliklerini artırıyoruz
+            // Bu sayede buton fiziksel olarak yer kaplamaya başlıyor
+            currentFontSize += 0.5; // Yazıyı büyüt
+            currentPadding += 10;   // Kutuyu büyüt
 
-            const randomX = getRandomPosition(maxX);
-            const randomY = getRandomPosition(maxY);
+            yesBtn.style.fontSize = currentFontSize + "rem";
+            yesBtn.style.padding = currentPadding + "px " + (currentPadding * 2) + "px";
 
-            // Butonu yeni konuma gönder
-            noBtn.style.position = "fixed"; // Artık ekranın herhangi bir yerinde olabilir
-            noBtn.style.left = randomX + "px";
-            noBtn.style.top = randomY + "px";
+            // 2. Hayır butonundaki yazıyı değiştir (Opsiyonel eğlence)
+            const phrases = ["Hayır mı?", "Emin misin?", "Yapma be!", "Kırıcı oluyosun", "Bas şu yeşile!"];
+            if (clickCount <= phrases.length) {
+                noBtn.innerText = phrases[clickCount - 1];
+            }
 
-            // 3. Final: Evet butonu çok büyüdüyse ekranı kapla
-            if (scaleFactor >= 6) {
+            // 3. Olayın sonu: Eğer çok fazla büyüdüyse (örneğin 6. tıklama)
+            // Artık ekranı tamamen kaplasın
+            if (clickCount >= 6) {
                 yesBtn.style.position = "fixed";
                 yesBtn.style.top = "0";
                 yesBtn.style.left = "0";
                 yesBtn.style.width = "100vw";
                 yesBtn.style.height = "100vh";
-                yesBtn.style.transform = "none"; 
-                yesBtn.style.borderRadius = "0";
-                yesBtn.style.display = "flex";
-                yesBtn.style.alignItems = "center";
-                yesBtn.style.justifyContent = "center";
                 yesBtn.style.fontSize = "5rem";
-                yesBtn.innerText = "....";
+                yesBtn.style.display = "flex";
+                yesBtn.style.justifyContent = "center";
+                yesBtn.style.alignItems = "center";
+                yesBtn.style.zIndex = "100";
+                yesBtn.style.borderRadius = "0";
+                yesBtn.innerText = "MECBURSUN EVET! 😂";
                 
-                noBtn.style.display = "none"; // Hayır butonunu yok et
+                // Hayır butonunu gizle
+                noBtn.style.display = "none";
             }
         }
 
@@ -168,4 +152,3 @@
 
 </body>
 </html>
-
