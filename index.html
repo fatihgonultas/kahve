@@ -14,7 +14,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden; /* Taşan kısımlar (Hayır butonu) görünmesin */
+            overflow: hidden; /* Taşan kısımlar görünmesin, temiz dursun */
             text-align: center;
         }
 
@@ -22,25 +22,24 @@
             color: #c62828;
             font-size: 2rem;
             margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         img {
             width: 200px;
             border-radius: 15px;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
-        /* Olayın koptuğu yer burası */
         .buttons {
             display: flex;
-            flex-direction: row; /* Yan yana durlar */
-            align-items: center; /* Dikeyde ortala */
-            justify-content: center; /* Yatayda ortala */
-            gap: 20px; /* Aralarında 20px boşluk olsun */
-            
-            /* ÖNEMLİ: Bu ayar sayesinde Evet büyüyünce Hayır aşağı kaymaz, sağa itilir */
-            flex-wrap: nowrap; 
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
             width: 100%;
+            height: 100px; /* Buton hizası bozulmasın */
         }
 
         button {
@@ -48,15 +47,16 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease; /* Büyüme animasyonu yumuşak olsun */
-            white-space: nowrap; /* Yazılar alt satıra inmesin */
+            transition: all 0.3s ease; /* Büyüme/Küçülme animasyonu */
+            white-space: nowrap;
+            flex-shrink: 0; /* Butonların büzüşmesini engelle (manuel küçülteceğiz) */
         }
 
         #yesBtn {
             background-color: #2e7d32;
             color: white;
             padding: 15px 30px;
-            font-size: 1.2rem; /* Başlangıç boyutu */
+            font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(46, 125, 50, 0.4);
         }
 
@@ -84,7 +84,7 @@
 <body>
 
     <div id="main-content">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDdtZ2FlZDM0aGd5emF6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6L2NhdC1iZWcvZ2lwaHkuZ2lm/MDJ9IbCxx54WGxpU KO/giphy.gif" alt="Please Cat">
+        <img id="cat-img" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDdtZ2FlZDM0aGd5emF6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6aDG4Z2Z6L2NhdC1iZWcvZ2lwaHkuZ2lm/MDJ9IbCxx54WGxpU KO/giphy.gif" alt="Please Cat">
         
         <h1 id="question">Bu akşam bir kahve? ☕</h1>
 
@@ -96,52 +96,53 @@
 
     <div id="success-message">
         <img src="https://media.giphy.com/media/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Cat" style="width: 300px; border-radius: 20px;">
-        <h1>Yey! Akşam görüşürüz! 🎉</h1>
+        <h1>Süper! Akşam 8'de ordayım! 🚗</h1>
     </div>
 
     <script>
-        let currentFontSize = 1.2; // Başlangıç font boyutu (rem cinsinden)
-        let currentPadding = 15;   // Başlangıç padding (px cinsinden)
-        let clickCount = 0;
+        // Başlangıç Değerleri
+        let yesFontSize = 1.2; 
+        let yesPadding = 15;
+        
+        let noFontSize = 1.2;
+        let noPadding = 15;
 
         function rejectOffer() {
-            clickCount++;
             const yesBtn = document.getElementById("yesBtn");
             const noBtn = document.getElementById("noBtn");
+            const img = document.getElementById("cat-img");
+            const title = document.getElementById("question");
 
-            // 1. Her tıklamada EVET butonunun özelliklerini artırıyoruz
-            // Bu sayede buton fiziksel olarak yer kaplamaya başlıyor
-            currentFontSize += 0.5; // Yazıyı büyüt
-            currentPadding += 10;   // Kutuyu büyüt
+            // 1. EVET Butonunu Agresif Büyüt
+            yesFontSize += 0.8; // Her basışta fontu baya büyüt
+            yesPadding += 10;   // Dolguyu artır
+            
+            yesBtn.style.fontSize = yesFontSize + "rem";
+            yesBtn.style.padding = yesPadding + "px " + (yesPadding * 2) + "px";
 
-            yesBtn.style.fontSize = currentFontSize + "rem";
-            yesBtn.style.padding = currentPadding + "px " + (currentPadding * 2) + "px";
-
-            // 2. Hayır butonundaki yazıyı değiştir (Opsiyonel eğlence)
-            const phrases = ["Hayır mı?", "Emin misin?", "Yapma be!", "Kırıcı oluyosun", "Bas şu yeşile!"];
-            if (clickCount <= phrases.length) {
-                noBtn.innerText = phrases[clickCount - 1];
-            }
-
-            // 3. Olayın sonu: Eğer çok fazla büyüdüyse (örneğin 6. tıklama)
-            // Artık ekranı tamamen kaplasın
-            if (clickCount >= 6) {
-                yesBtn.style.position = "fixed";
-                yesBtn.style.top = "0";
-                yesBtn.style.left = "0";
-                yesBtn.style.width = "100vw";
-                yesBtn.style.height = "100vh";
-                yesBtn.style.fontSize = "5rem";
-                yesBtn.style.display = "flex";
-                yesBtn.style.justifyContent = "center";
-                yesBtn.style.alignItems = "center";
-                yesBtn.style.zIndex = "100";
-                yesBtn.style.borderRadius = "0";
-                yesBtn.innerText = "MECBURSUN EVET! 😂";
+            // 2. HAYIR Butonunu Küçült (Can çekişsin)
+            if (noFontSize > 0.3) { // 0.3 rem'in altına düşmesin yoksa kaybolur
+                noFontSize -= 0.2; 
+                noPadding -= 2;
                 
-                // Hayır butonunu gizle
-                noBtn.style.display = "none";
+                noBtn.style.fontSize = noFontSize + "rem";
+                noBtn.style.padding = noPadding + "px " + (noPadding * 2) + "px";
+            } else {
+                // Minimum boyutta kalsın
+                noBtn.style.fontSize = "0.3rem"; 
+                noBtn.style.padding = "2px 5px";
+                noBtn.innerText = "hyr"; // Yazı sığsın diye kısalttık
             }
+
+            // 3. Yer açmak için resim ve başlığı da küçültelim veya gizleyelim
+            // EVET çok büyüdüğünde başlık ve resim kalabalık yapmasın
+            if (yesFontSize > 3) {
+                img.style.display = "none";
+                title.style.display = "none";
+            }
+
+            // NOT: Burada "clickCount >= 6 ise fullscreen yap" kodu YOK.
+            // Buton sonsuza kadar büyüyebilir, kontrol tamamen kullanıcıda.
         }
 
         function acceptOffer() {
